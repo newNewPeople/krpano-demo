@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang=""><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="favicon.ico"><title>全景漫游</title><script src="https://cdn.jiajutech.com/720/js/jweixin-1.6.0.js"></script><script src="https://cdn.jiajutech.com/720/js/krpano.js"></script><script src="static/jkl.js"></script><link href="css/chunk-31ac3f7b.68457534.css" rel="prefetch"><link href="css/chunk-4275d91a.3bcb1359.css" rel="prefetch"><link href="css/chunk-7cc08b0a.75cfc713.css" rel="prefetch"><link href="css/chunk-aa25501e.16ec4ad2.css" rel="prefetch"><link href="css/viewerjs.js.1cf0473b.css" rel="prefetch"><link href="js/chunk-2d217eda.e951d531.js" rel="prefetch"><link href="js/chunk-31ac3f7b.e11f310b.js" rel="prefetch"><link href="js/chunk-4275d91a.6a2817d8.js" rel="prefetch"><link href="js/chunk-5a75b868.bb220933.js" rel="prefetch"><link href="js/chunk-7cc08b0a.074fde8c.js" rel="prefetch"><link href="js/chunk-aa25501e.b99ae96d.js" rel="prefetch"><link href="js/viewerjs.js.1b18493e.js" rel="prefetch"><link href="css/app.da21f045.css" rel="preload" as="style"><link href="css/chunk-vendors.5cbbb097.css" rel="preload" as="style"><link href="js/app.7abb5225.js" rel="preload" as="script"><link href="js/chunk-vendors.e1bb40da.js" rel="preload" as="script"><link href="css/chunk-vendors.5cbbb097.css" rel="stylesheet"><link href="css/app.da21f045.css" rel="stylesheet"></head><body><noscript><strong>We're sorry but 720viewer doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div><script src="js/chunk-vendors.e1bb40da.js"></script><script src="js/app.7abb5225.js"></script></body><script>(function (window) {
+    var theUA = window.navigator.userAgent.toLowerCase();
+    if ((theUA.match(/msie\s\d+/) && theUA.match(/msie\s\d+/)[0]) || (theUA.match(/trident\s?\d+/) && theUA.match(
+        /trident\s?\d+/)[0])) {
+      var ieVersion = theUA.match(/msie\s\d+/)[0].match(/\d+/)[0] || theUA.match(/trident\s?\d+/)[0];
+      if (ieVersion < 11) {
+        var str = "浏览器版本过低,请使用最新版chrome浏览器打开。:(";
+        document.writeln(
+          "<pre style='text-align:center;color:#fff;background-color:#0cc; height:100%;border:0;position:fixed;top:0;left:0;width:100%;z-index:1234'>" +
+          "<h2 style='padding-top:200px;margin:0'><strong>" + str + "<br/></strong></h2>");
+        document.execCommand("Stop");
+      };
+    }
+    function check360() {
+        var result = false; 
+        for (var key in navigator.plugins) {
+            // np-mswmp.dll只在360浏览器下存在
+            if (navigator.plugins[key].filename == 'internal-nacl-plugin') {
+                return !result;
+            }
+        }
+        return result;
+    }
+    function getChromeVersion() {
+        var arr = navigator.userAgent.split(' ');
+        var ua = navigator.userAgent
+        var chromeVersion = '';
+        var sign = true
+        var isSafari = (ua.indexOf("Safari") > -1) && (ua.indexOf("Chrome") == -1)
+        if(isSafari) {
+          sign = false 
+        }
+        var isEdge = ua.indexOf("Edg") > -1
+        // 返回结果
+        if (isEdge) { sign = false }
+        // 返回结果
+        for(var i=0;i < arr.length;i++){
+          if(/QQBrowser/i.test(arr[i]) // qq
+          || /UBrowser/i.test(arr[i])  // uc
+          || /ubrowser/i.test(arr[i]) // uc
+          || /bidubrowser/i.test(arr[i]) // 百度
+          || /metasr/i.test(arr[i]) // 搜狗
+          || /opera/i.test(arr[i]) // 欧朋
+          || /maxthon/i.test(arr[i]) // 遨游
+          || /2345Explorer/i.test(arr[i])
+          || /Firefox/i.test(arr[i]) // 火狐
+          || check360() // 360
+          ) {
+            sign =false
+          }
+          if(/chrome/i.test(arr[i]) && navigator.userAgentData)
+          chromeVersion = arr[i]
+        }
+        if(chromeVersion && sign){
+            return Number(chromeVersion.split('/')[1].split('.')[0]);
+        } else {
+            return false;
+        }
+    }
+    if(getChromeVersion()) {
+        var version = getChromeVersion();
+        if(version <= 78) {
+          var str = "推荐使用谷歌浏览器 :(";
+          document.writeln(
+            "<pre style='text-align:center;color:#fff;background-color:#0cc; height:100%;border:0;position:fixed;top:0;left:0;width:100%;z-index:1234'>" +
+            "<h2 style='padding-top:200px;margin:0'><strong>" + str + "<br/></strong></h2>");
+          window.stop();
+        }
+    }
+  })(window);</script></html>
