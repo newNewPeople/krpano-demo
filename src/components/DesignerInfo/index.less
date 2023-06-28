@@ -1,0 +1,89 @@
+.designer {
+    position: fixed;
+    left: 16px;
+    bottom: 30px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 24px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+
+    .portrait {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+    }
+
+    p {
+        display: inline-block;
+        color: #fff;
+        padding: 0 4px;
+    }
+
+    p.active {
+        color: #2d8cf0;
+        font-weight: 700;
+    }
+
+    .split {
+        padding: 0 2px;
+        color: #515a6e;
+    }
+
+    &-right {
+        padding: 0 12px 0 8px;
+    }
+}
+
+.modal {
+    text-align: center;
+
+    img {
+        border-radius: 50%;
+        width: 123px;
+        height: 123px;
+    }
+
+    .title {
+        font-size: 20px;
+        color: #fff;
+        margin: 12px 0 4px;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    div {
+        margin: 12px 0;
+    }
+}
+
+
+@media only screen and (max-width: 1080px) {
+    .designer {
+        font-size: 12px;
+        padding: 2px 6px;
+        bottom: 16px;
+
+        .portrait {
+            width: 32px;
+            height: 32px;
+        }
+
+    }
+    .hidePhone {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 1080px) {
+    .hidePc {
+        display: none;
+    }
+}

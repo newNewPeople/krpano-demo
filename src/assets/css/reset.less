@@ -1,0 +1,711 @@
+// Prefix
+@css-prefix : ivu-;
+@css-prefix : ivu-;
+@css-prefix-iconfont : ivu-icon;
+
+// Color
+@primary-color : #2d8cf0;
+@info-color : #2db7f5;
+@success-color : #19be6b;
+@processing-color : @primary-color;
+@warning-color : #ff9900;
+@error-color : #ed4014;
+@normal-color : #e6ebf1;
+@link-color : #2D8cF0;
+@link-hover-color : tint(@link-color, 20%);
+@link-active-color : shade(@link-color, 5%);
+@selected-color : fade(@primary-color, 90%);
+@tooltip-color : #fff;
+@subsidiary-color : #808695;
+@rate-star-color : #f5a623;
+@white: #fff;
+@black: #000;
+
+// Base
+@body-background : #fff;
+@component-background : #fff;
+@font-family : "Helvetica Neue",
+Helvetica,
+"PingFang SC",
+"Hiragino Sans GB",
+"Microsoft YaHei",
+"微软雅黑",
+Arial,
+sans-serif;
+@code-family : Consolas,
+Menlo,
+Courier,
+monospace;
+@title-color : #17233d;
+@text-color : #515a6e;
+@text-color-secondary: fade(@black, 45%);
+@heading-color: fade(#000, 85%);
+@heading-color-dark: fade(@white, 100%);
+@font-size-base : 14px;
+@font-size-small : 12px;
+@font-size-large : @font-size-base +2px;
+@line-height-base : 1.5;
+@line-height-computed : floor((@font-size-base * @line-height-base));
+@border-radius-base : 6px;
+@border-radius-small : 4px;
+@cursor-disabled : not-allowed;
+
+// vertical paddings
+@padding-lg: 24px; // containers
+@padding-md: 16px; // small containers and buttons
+@padding-sm: 12px; // Form controls and items
+@padding-xs: 8px; // small items
+
+// Border color
+@border-color-base : #dcdee2; // outside
+@border-color-split : #e8eaec; // inside
+@border-width-base : 1px; // width of the border for a component
+@border-style-base : solid; // style of a components border
+
+// Background color
+@background-color-base : #f7f7f7; // base
+@background-color-select-hover: @input-disabled-bg;
+@tooltip-bg : rgba(70, 76, 91, .9);
+@head-bg : #f9fafc;
+@table-thead-bg : #f8f8f9;
+@table-td-stripe-bg : #f8f8f9;
+@table-td-hover-bg : #ebf7ff;
+@table-td-highlight-bg : #ebf7ff;
+@menu-dark-title : #515a6e;
+@menu-dark-active-bg : #363e4f;
+@menu-dark-subsidiary-color : rgba(255, 255, 255, .7);
+@menu-dark-group-title-color : rgba(255, 255, 255, .36);
+@date-picker-cell-hover-bg : #e1f0fe;
+
+// Shadow
+@shadow-color : rgba(0, 0, 0, .2);
+@shadow-base : @shadow-down;
+@shadow-card : 0 1px 1px 0 rgba(0, 0, 0, .1);
+@shadow-up : 0 -1px 6px @shadow-color;
+@shadow-down : 0 1px 6px @shadow-color;
+@shadow-left : -1px 0 6px @shadow-color;
+@shadow-right : 1px 0 6px @shadow-color;
+
+// Button
+@btn-height-base : 32px;
+@btn-height-large : 40px;
+@btn-height-small : 24px;
+
+@btn-padding-base : 0 @padding-md - 1px;
+@btn-padding-large : @btn-padding-base;
+@btn-padding-small : 0 @padding-xs - 1px;
+
+@btn-font-weight : normal;
+@btn-padding-base-icon : 5px 15px 6px;
+@btn-padding-large-icon : 6px 15px 6px 15px;
+@btn-padding-small-icon : 1px 7px 2px;
+@btn-font-size : @font-size-base;
+@btn-font-size-large : @font-size-large;
+@btn-font-size-small : @font-size-base;
+@btn-border-radius : 4px;
+@btn-border-radius-small: 3px;
+@btn-group-border : shade(@primary-color, 5%);
+
+@btn-disable-color : #c5c8ce;
+@btn-disable-bg : @background-color-base;
+@btn-disable-border : @border-color-base;
+
+@btn-default-color : @text-color;
+@btn-default-bg : #fff;
+@btn-default-border : @border-color-base;
+
+@btn-primary-color : #fff;
+@btn-primary-bg : @primary-color;
+
+@btn-ghost-color : @text-color;
+@btn-ghost-bg : #fff;
+@btn-ghost-border : @border-color-base;
+
+@btn-circle-size : @btn-height-base;
+@btn-circle-size-large : @btn-height-large;
+@btn-circle-size-small : @btn-height-small;
+
+@btn-square-size : @btn-height-base;
+@btn-square-size-large : @btn-height-large;
+@btn-square-size-small : @btn-height-small;
+
+// Layout and Grid
+@grid-columns : 24;
+@grid-gutter-width : 0;
+@layout-body-background : #f5f7f9;
+@layout-header-background : #515a6e;
+@layout-header-height : 64px;
+@layout-header-padding : 0 50px;
+@layout-footer-padding : 24px 50px;
+@layout-footer-background : @layout-body-background;
+@layout-sider-background : @layout-header-background;
+@layout-trigger-height : 48px;
+@layout-trigger-color : #fff;
+@layout-zero-trigger-width : 36px;
+@layout-zero-trigger-height : 42px;
+
+// Legend
+@legend-color : #999;
+
+// Input
+@input-height-base : 32px;
+@input-height-large : 40px;
+@input-height-small : 24px;
+
+@input-padding-horizontal : 7px;
+@input-padding-vertical-base : 4px;
+@input-padding-vertical-small: 1px;
+@input-padding-vertical-large: 6px;
+
+@input-placeholder-color : @btn-disable-color;
+@input-color : @text-color;
+@input-border-color : @border-color-base;
+@input-bg : #fff;
+@input-group-bg : #f8f8f9;
+
+@input-hover-border-color : @primary-color;
+@input-focus-border-color : @primary-color;
+@input-disabled-bg : #f3f3f3;
+
+// Tag
+@tag-font-size : 12px;
+
+// Media queries breakpoints
+// Extra small screen / phone
+@screen-xs : 480px;
+@screen-xs-min : @screen-xs;
+@screen-xs-max : (@screen-xs-min - 1);
+
+// Small screen / tablet
+@screen-sm : 576px;
+@screen-sm-min : @screen-sm;
+@screen-sm-max : (@screen-sm-min - 1);
+
+// Medium screen / desktop
+@screen-md : 768px;
+@screen-md-min : @screen-md;
+@screen-md-max : (@screen-md-min - 1);
+
+// Large screen / wide desktop
+@screen-lg : 992px;
+@screen-lg-min : @screen-lg;
+@screen-lg-max : (@screen-lg-min - 1);
+
+// Extra large screen / full hd
+@screen-xl : 1200px;
+@screen-xl-min : @screen-xl;
+@screen-xl-max : (@screen-xl-min - 1);
+
+// Extra extra large screen / large descktop
+@screen-xxl : 1600px;
+@screen-xxl-min : @screen-xxl;
+@screen-xxl-max : (@screen-xxl-min - 1);
+
+// Z-index
+@zindex-spin : 8;
+@zindex-affix : 10;
+@zindex-back-top : 10;
+@zindex-select : 900;
+@zindex-modal : 1000;
+@zindex-drawer : 1000;
+@zindex-message : 1010;
+@zindex-notification : 1010;
+@zindex-tooltip : 1060;
+@zindex-transfer : 1060;
+@zindex-loading-bar : 2000;
+@zindex-spin-fullscreen : 2010;
+
+// Animation
+@animation-time : .3s;
+@animation-time-quick : .15s;
+@transition-time : .2s;
+@ease-in-out : ease-in-out;
+
+// Slider
+@slider-color : tint(@primary-color, 20%);
+@slider-height : 4px;
+@slider-margin : 16px 0;
+@slider-button-wrap-size : 18px;
+@slider-button-wrap-offset : -5px;
+@slider-disabled-color : #ccc;
+
+// Avatar
+@avatar-size-base: 32px;
+@avatar-size-lg: 40px;
+@avatar-size-sm: 24px;
+@avatar-font-size-base: 18px;
+@avatar-font-size-lg: 24px;
+@avatar-font-size-sm: 14px;
+@avatar-bg: #ccc;
+@avatar-color: #fff;
+@avatar-border-radius: @border-radius-small;
+
+// Anchor
+@anchor-border-width: 2px;
+
+// List
+// ---
+@list-header-background: transparent;
+@list-footer-background: transparent;
+@list-empty-text-padding: @padding-md;
+@list-item-padding: @padding-sm 0;
+@list-item-meta-margin-bottom: @padding-md;
+@list-item-meta-avatar-margin-right: @padding-md;
+@list-item-meta-title-margin-bottom: @padding-sm;
+
+
+body,
+html {
+    scrollbar-arrow-color: #34393e;
+    /**/
+    /*三角箭头的颜色*/
+    scrollbar-face-color: #34393e;
+    /**/
+    /*立体滚动条的颜色*/
+    scrollbar-3dlight-color: #34393e;
+    /**/
+    /*立体滚动条亮边的颜色*/
+    scrollbar-highlight-color: #34393e;
+    /**/
+    /*滚动条空白部分的颜色*/
+    scrollbar-shadow-color: #34393e;
+    ;
+    /**/
+    /*立体滚动条阴影的颜色*/
+    scrollbar-darkshadow-color: #34393e;
+    /**/
+    /*立体滚动条强阴影的颜色*/
+    scrollbar-track-color: #34393e;
+    /**/
+    /*立体滚动条背景颜色*/
+    scrollbar-base-color: #34393e;
+    /**/
+    /*滚动条的基本颜色*/
+}
+
+// Here are the variables to cover, such as:
+@primary-color: #1a7af8;
+@bgc-color-my: #1e2329;
+@sub-bgc-color-my: #34393e;
+@border-color-my: #616569;
+
+// cover modal of iview
+@modal-prefix-cls: ~"@{css-prefix}modal";
+@confirm-prefix-cls: ~"@{css-prefix}modal-confirm";
+
+.@{modal-prefix-cls} {
+
+    &-header {
+        border-bottom: 1px solid #1e2329;
+        color: #fff;
+        background-color: #34393e;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+    }
+
+    &-header-inner {
+        color: #fff;
+        font-size: 14px;
+    }
+
+    &-content {
+        background-color: #34393e;
+    }
+
+    &-body {
+        color: #fff;
+    }
+
+    &-confirm-body {
+        color: #eee;
+    }
+
+    &-footer {
+        border-top: 1px solid #1e2329;
+        background-color: #2a2f34;
+    }
+
+    .ivu-modal-confirm-head-title {
+        color: #fff;
+    }
+
+    &-close i {
+        color: #fff !important;
+        font-weight: 700;
+    }
+
+    &-close .ivu-icon-ios-close:hover {
+        color: #fff;
+    }
+
+    .ivu-form .ivu-form-item-label {
+        color: #ddd;
+    }
+
+    img {
+        cursor: pointer;
+    }
+}
+
+// cover modal of input
+@input-prefix-cls: ~"@{css-prefix}input";
+
+.@{input-prefix-cls} {
+    font-size: @font-size-small;
+    background-color: #1e2329;
+    color: hsla(0, 0%, 100%, .75);
+    border: .5px solid rgba(102, 102, 102, .75);
+    border-color: rgba(102, 102, 102, .75);
+
+    &:focus {
+        color: #fff;
+    }
+
+    &-word-count {
+        font-size: @font-size-small;
+        background-color: #1e2329;
+        color: hsla(0, 0%, 100%, .6);
+    }
+
+    // Firefox
+    &::-moz-placeholder {
+        font-size: @font-size-small;
+        line-height: 2;
+    }
+
+    // Internet Explorer 10+
+    &:-ms-input-placeholder {
+        font-size: @font-size-small;
+        line-height: 2;
+    }
+
+    // Safari and Chrome
+    &::-webkit-input-placeholder {
+        font-size: @font-size-small;
+        line-height: 2;
+    }
+}
+
+// cover button
+@btn-prefix-cls: ~"@{css-prefix}btn";
+
+.@{btn-prefix-cls} {
+
+    &-ghost&-dashed,
+    &-ghost&-default {
+        border-color: hsla(0, 0%, 100%, .6);
+    }
+
+    &-small {
+        font-size: @font-size-small;
+    }
+}
+
+// cover poptip
+@poptip-prefix-cls: ~"@{css-prefix}poptip";
+
+.@{poptip-prefix-cls} {
+    &-confirm &-body {
+        &-message {
+            color: #1e2329;
+            margin-top: -2px;
+        }
+    }
+}
+
+// cover card
+@card-prefix-cls: ~"@{css-prefix}card";
+
+.@{card-prefix-cls} {
+    background: #2a2f34;
+    border: none;
+
+    label.ivu-checkbox-wrapper {
+        display: block;
+    }
+}
+
+// cover ipt
+.checkboxFn(@checkbox-prefix-cls: ~"@{css-prefix}checkbox") {
+    @checkbox-inner-prefix-cls: ~"@{checkbox-prefix-cls}-inner";
+
+    .@{checkbox-prefix-cls} {
+        &:hover {
+            .@{checkbox-inner-prefix-cls} {
+                border-color: @primary-color;
+            }
+        }
+
+        &-inner {
+            background-color: #000;
+            border: 1px solid #000;
+        }
+    }
+}
+
+// cover 
+.ivu-checkbox-disabled.ivu-checkbox-checked .ivu-checkbox-inner:after {
+    border-color: @primary-color;
+}
+
+// cover collapse
+@collapse-prefix-cls: ~"@{css-prefix}collapse";
+
+.@{collapse-prefix-cls} {
+    border-radius: 0;
+    background: #34393e;
+    border: none;
+
+    &>&-item {
+        border: none;
+        border-bottom: 1px solid #1e2329;
+
+        >.@{collapse-prefix-cls}-header {
+            height: 40px;
+            line-height: 40px;
+            border: none;
+            background: #34393e;
+            color: hsla(0, 0%, 100%, .9);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+
+            &::before {
+                content: '';
+                display: inline-block;
+                width: 4px;
+                height: 16px;
+                margin-right: 10px;
+                background: #3e82f7;
+                vertical-align: text-bottom;
+            }
+
+            &:hover .ivu-icon-ios-arrow-forward:before {
+                color: #3e82f7;
+            }
+
+            i {
+                position: absolute;
+                right: 0;
+                top: 13px;
+            }
+        }
+    }
+
+    &>&-item&-item-active>&-header {
+        background: #34393e;
+        border: none;
+    }
+
+    &-content {
+        background: #34393e;
+        color: hsla(0, 0%, 100%, .9);
+
+        &>&-box {
+            padding: 14px 0;
+        }
+    }
+}
+
+// cover form
+
+@form-prefix-cls: ~"@{css-prefix}form";
+@form-item-prefix-cls: ~"@{form-prefix-cls}-item";
+
+.@{form-prefix-cls} {
+    .@{form-item-prefix-cls}-label {
+        font-size: 13px;
+        color: #ddd;
+    }
+}
+
+// cover disabled
+@input-disabled-bg: #1e2329;
+
+.disabled() {
+    background-color: @input-disabled-bg;
+    opacity: 1;
+    cursor: @cursor-disabled;
+
+    &:hover {
+        .hover(@input-border-color);
+    }
+}
+
+// cover select
+@select-prefix-cls: ~"@{css-prefix}select";
+@select-item-prefix-cls: ~"@{css-prefix}select-item";
+@select-group-prefix-cls: ~"@{css-prefix}select-group";
+
+.@{select-prefix-cls} {
+    font-size: @font-size-small;
+
+    &-selection {
+        background-color: @bgc-color-my;
+        border-color: @border-color-my;
+        color: hsla(0, 0%, 100%, .6);
+        font-weight: 600;
+    }
+
+    &-single &-selection {
+
+        .@{select-prefix-cls}-placeholder,
+        .@{select-prefix-cls}-selected-value {
+            font-size: @font-size-small;
+
+            &:hover {
+                color: #fff;
+            }
+        }
+    }
+
+    &-dropdown-list {
+        .ivu-select-item {
+            color: #eee;
+        }
+
+        .ivu-select-item-selected,
+        .ivu-select-item-selected:hover {
+            color: @primary-color;
+        }
+    }
+}
+
+// cover select dropdown
+@select-dropdown-prefix-cls: ~"@{css-prefix}select-dropdown";
+@transfer-no-max-height: ~"@{css-prefix}transfer-no-max-height";
+
+.@{select-dropdown-prefix-cls} {
+    background-color: @sub-bgc-color-my;
+    border-color: @border-color-my;
+    font-size: @font-size-small;
+    border-color: @border-color-my;
+}
+
+.select-item(@size-class, @item-class) {
+    .@{item-class} {
+        font-size: @font-size-small  !important;
+    }
+}
+
+// cover tooltip
+@tooltip-prefix-cls: ~"@{css-prefix}tooltip";
+@tooltip-arrow: ~"@{tooltip-prefix-cls}-arrow";
+
+.@{tooltip-prefix-cls} {
+    font-size: @font-size-small;
+}
+
+// cover date picker
+@date-picker-prefix-cls: ~"@{css-prefix}date-picker";
+@picker-prefix-cls: ~"@{css-prefix}picker";
+
+.@{date-picker-prefix-cls} {
+    &-cells {
+        span {
+            em {
+                color: hsla(0, 0%, 100%, 0.9);
+
+                &:hover {
+                    background: @primary-color;
+                }
+            }
+        }
+
+        &-cell {
+
+            &-prev-month,
+            &-next-month {
+                em {
+                    color: #5E5A6E !important;
+                }
+
+                &:hover {
+                    em {
+                        background: transparent !important;
+                    }
+                }
+            }
+        }
+    }
+
+    &-header {
+        height: 32px;
+        line-height: 32px;
+        border-bottom: 1px solid @border-color-split;
+
+        &-label {
+            cursor: pointer;
+            color: #fff;
+            transition: color @transition-time @ease-in-out;
+
+            &:hover {
+                color: @primary-color;
+            }
+        }
+    }
+}
+
+.@{picker-prefix-cls} {
+    &-panel {
+        &-sidebar {
+            background: #34393e;
+            color: #fff;
+            color: hsla(0, 0%, 100%, 0.9);
+        }
+
+        &-shortcut {
+            &:hover {
+                background: @primary-color;
+            }
+        }
+    }
+
+    &-confirm {
+        .ivu-btn-text {
+            color: @primary-color;
+        }
+    }
+}
+
+// cover spin
+.ivu-spin-fix {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.demo-spin-icon-load {
+    animation: ani-demo-spin 1s linear infinite;
+}
+
+.ivu-carousel-dots li.ivu-carousel-active>button {
+    width: 48px;
+    height: 6px;
+    background-color: #fff;
+    background: #fff;
+}
+
+.ivu-carousel-dots li button {
+    width: 32px;
+    height: 6px;
+    background: #fff;
+    background-color: #fff;
+}
+
+// v-viewer样式修改
+.viewer-button {
+    height: 40px !important;
+    right: 50% !important;
+    bottom: 100px !important;
+    top: auto !important;
+    transform: translate(50%, 0);
+    width: 40px !important;
+}
+
+.viewer-button::before {
+    bottom: 10px !important;
+    left: 10px !important;
+}
+
+.viewer-backdrop {
+    background-color: rgba(0, 0, 0, 80%) !important;
+}

@@ -1,0 +1,224 @@
+// 嘉居样式
+.edit-loader {
+    background-image: url(../../assets/images/loadingBackground.png);
+    // background-image: url('https://cdn.jiajutech.com/720/img/loadingBackground.png');
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 999999999;
+    background-size: cover;
+}
+
+// 加遮罩层
+.edit-loader:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    background-color: rgba(60, 61, 60, 0.9);
+    z-index: 999999;
+    width: 100%;
+    height: 100%;
+}
+
+.edit-loader {
+    .companyVision {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #fff;
+        z-index: 999999999;
+
+        .imgClass {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            img {
+                // width: 65px;
+                height: 55px;
+                // object-fit: contain;
+                margin-right: 3px;
+            }
+
+            .companyName {
+                font-size: 1.5rem;
+                letter-spacing: 6px;
+                margin-left: 3px;
+            }
+        }
+
+        .companySlogan {
+            font-size: 0.8rem;
+            text-align: center;
+        }
+    }
+
+    .ivu-progress {
+        position: absolute;
+        width: 52%;
+        bottom: 23%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 999999999;
+    }
+
+    .ivu-progress-bg {
+        background-color: #b1b2b1;
+    }
+
+    // 图片加载中样式
+    .loading {
+        position: absolute;
+        left: 50%;
+        bottom: 19%;
+        transform: translate(-50%, -50%);
+        z-index: 999999999;
+        color: #636664;
+    }
+}
+
+// 欧派样式
+.edit-loader-oppein {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 999999999;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 1;
+}
+
+.oppein {
+    // background-image: url(../../assets/images/loadingBackgroundOppein.jpg);
+    background-image: url('https://cdn.jiajutech.com/720/img/loadingBackgroundOppein.jpg?x-oss-process=image/quality,q_60/format,webp');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+}
+
+.cupboard {
+    background-image: url(../../assets/images/oppeinCupboard.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+}
+
+// 加遮罩层
+.edit-loader-oppein:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    z-index: 999999999;
+    width: 100%;
+    height: 100%;
+}
+
+.edit-loader-oppein {
+    .imgLogo {
+        position: absolute;
+        left: 1.5%;
+        top: 3%;
+        width: 12%;
+    }
+
+    .companyVision {
+        position: absolute;
+        top: 39%;
+        left: 50%;
+        width: 100%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #fff;
+        z-index: 999999999;
+
+        .imgClass {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            img {
+                width: 40%;
+                // height: 55%;
+                // object-fit: contain;
+                margin-right: 3px;
+            }
+
+            .companyName {
+                font-size: 1.5rem;
+                letter-spacing: 6px;
+                margin-left: 3px;
+            }
+        }
+
+        .companySlogan {
+            font-size: 0.8rem;
+            text-align: center;
+        }
+    }
+
+    .ivu-progress {
+        position: absolute;
+        width: 52%;
+        bottom: 23%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 999999999;
+    }
+
+    .ivu-progress-bg {
+        background-color: #b1b2b1;
+    }
+
+    // 图片加载中样式
+    .loading {
+        position: absolute;
+        left: 50%;
+        bottom: 19%;
+        transform: translate(-50%, -50%);
+        z-index: 999999999;
+        color: #636664;
+    }
+
+    // 嘉居倾力支持
+    .support {
+        position: absolute;
+        top: 72%;
+        left: 50%;
+        font-size: 18px;
+        transform: translate(-50%, -50%);
+        z-index: 999999999;
+        color: #fff;
+        text-align: center;
+    }
+}
+
+@keyframes spin {
+
+    0%,
+    15% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

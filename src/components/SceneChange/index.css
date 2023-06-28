@@ -1,0 +1,137 @@
+.scene-change {
+  position: fixed;
+  right: 78px;
+  bottom: 50px;
+}
+.scene-change .btn-text {
+  width: 60px !important;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: bottom 2s;
+}
+.fade-enter {
+  bottom: 100px;
+}
+.fade-leave-to {
+  bottom: -120px;
+}
+.img-wrap img {
+  width: 128px;
+  height: 96px;
+  margin: 10px;
+}
+.thumb_bg {
+  position: fixed;
+  left: 0;
+  display: block;
+  width: 100%;
+  bottom: 100px;
+  height: 120px;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  z-index: 1001;
+}
+.thumb_box {
+  position: absolute;
+  text-align: center;
+  top: 0;
+  left: 28px;
+  right: 28px;
+  bottom: -18px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: scroll;
+  overflow-y: hidden;
+}
+.thumb {
+  width: 132px;
+  height: 100px;
+  background-color: #ffffff;
+  margin: 10px;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+.list-show {
+  bottom: 100px;
+  transition: all ease-in-out 0.5s;
+}
+.list-hide {
+  bottom: -180px;
+  transition: all ease-in-out 0.5s;
+}
+.thumb img {
+  width: 128px;
+  height: 96px;
+  margin: 2px;
+  user-select: none;
+}
+.thumb p {
+  width: 128px;
+  color: white;
+  font-size: 14px;
+  margin: 0 0 0 2px;
+  position: absolute;
+  bottom: 2px;
+  background-color: rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: none;
+}
+.mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 1000;
+}
+.thumb-gray-border {
+  background-color: #999999;
+}
+.thumb-white-border {
+  background-color: #ffffff;
+}
+.toleft {
+  height: 120px;
+  display: inline;
+  float: left;
+  position: relative;
+  cursor: pointer;
+}
+.toleft i {
+  line-height: 120px;
+  color: #fff;
+  font-size: 32px;
+}
+.toright {
+  height: 120px;
+  display: inline;
+  float: right;
+  position: relative;
+  cursor: pointer;
+}
+.toright i {
+  line-height: 120px;
+  font-size: 32px;
+  color: #fff;
+}
+@media screen and (max-width: 776px) {
+  .scene-change .btn-text {
+    display: none;
+  }
+  .scene-change {
+    right: 16px;
+    bottom: 16px;
+  }
+  .show {
+    display: inline-block !important;
+  }
+  .scene-change.scene-change.show {
+    bottom: 16px !important;
+    right: 72px !important;
+  }
+}
