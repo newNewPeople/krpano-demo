@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import { Modal, Button, Alert, Progress, Icon, Input ,RadioGroup,Radio } from 'view-design';
+import { Modal, Button, Alert, Progress, Icon, Input ,RadioGroup,Radio,Message } from 'view-design';
 Vue.component('Modal', Modal);
 Vue.component('Button', Button);
 Vue.component('Alert', Alert);
@@ -11,6 +11,7 @@ Vue.component('Icon', Icon);
 Vue.component('Input', Input);
 Vue.component('RadioGroup', RadioGroup);
 Vue.component('Radio', Radio);
+Vue.component('Message', Message);
 
 // 引入css
 import 'view-design/dist/styles/iview.css'

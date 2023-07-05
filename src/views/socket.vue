@@ -9,8 +9,8 @@
       name : 'socket',
       data() {
     return {
-      path: 'ws://183.56.204.212:2718/ws/123456',
-      // path: 'ws://192.168.0.139:9999/api/notification/topic/server',
+      path: 'wss://ws.kujiale.com',
+      // path: 'ws://82.157.123.54:9010/ajaxchattest',
       websocket: undefined
     }
   },

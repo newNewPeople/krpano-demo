@@ -5,7 +5,7 @@
       v-model="visible"
       title="错误"
       footer-hide
-      :closable="false"
+      :closable="true"
       :mask-closable="false"
     >
       <Alert type="error" show-icon>

@@ -75,6 +75,8 @@ export default {
       } else {
         this.audio.pause();
       }
+      this.$emit("musicStatusChange",this.musicStatus)
+      
     },
     wxPlayAudio() {
       let _this = this;

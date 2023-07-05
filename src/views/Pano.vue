@@ -10,7 +10,10 @@
       <!-- 全屏 -->
       <full-screen></full-screen>
       <!-- 背景音乐 -->
-      <bgc-music :musicSrc="scene.Sound"></bgc-music>
+      <bgc-music
+        :musicSrc="scene.Sound"
+        @musicStatusChange="musicStatusChange"
+      ></bgc-music>
       <!-- 自动旋转 -->
       <scene-roate></scene-roate>
       <!-- 分享 -->
@@ -22,22 +25,42 @@
 
       <!-- 
       多屏联动 -->
-      <div class="n-screen" @click="dialogVisible = true">多屏联动</div>
-      <div class="multi-controller-panel pc">
+      <div class="n-screen" @click="dialogVisible = true">
+        <Icon type="ios-browsers-outline" size="20" />
+        <p style="margin-top: 10px">多屏联动</p>
+      </div>
+      <div class="multi-controller-panel pc" v-if="viewing">
         <ul class="clearfix">
-          <li class="copy-group-id">
+          <li class="copy-group-id" v-if="vertical == 'controler'">
             <a class="group-id" href="javascript:;" title="复制识别码"
-              >识别码：<i>06270470 复制 </i></a
+              >识别码：<i>{{ interlinkage }}  <span
+        class="btn"
+        style="width: 240px; margin-top: 28px"
+        type="primary"
+        :data-clipboard-text="interlinkage"
+        @click.prevent="copy"
+        target="_blank"
+        >复制</span
+      > </i></a
             >
           </li>
-          <li class="controller">当前控制数：<span class="count">0</span></li>
+          <li class="controller" v-if="vertical == 'controler'">
+            当前控制数：<span class="count">0</span>
+          </li>
+          <li class="controlled" v-if="vertical == 'viewer'">演示中...</li>
           <li>
-            <a class="button-close" href="javascript:;" title="结束控制"
+            <a
+              class="button-close"
+              href="javascript:;"
+              title="结束控制"
+              @click="finish"
               >结束演示</a
             >
           </li>
         </ul>
       </div>
+
+      <!-- 音视频 -->
     </div>
     <!-- 错误提示 -->
     <error-tip ref="error"></error-tip>
@@ -46,25 +69,27 @@
       v-model="dialogVisible"
       title="多屏联动"
       footer-hide
-      :closable="false"
       :mask-closable="false"
     >
+      <div slot="title" class="n-screen-title">
+        多屏联
+      </div>
       <RadioGroup v-model="vertical" vertical>
-        <Radio label="controler" size="large">
-          <Icon type="social-android"></Icon>
-          <span>我是演示方</span>
-          <!-- <p>可以远程控制观看方设备进行方案演示</p> -->
+        <Radio label="controler" size="large" :style="{background:vertical=='controler'?'hsla(0,0%,100%,.9)':'hsla(0,0%,100%,.03)',color:vertical=='controler'?'#000':'hsla(0,0%,100%,.9)'}">
+          <span class="card-title">我是演示方</span>
+          <p class="aLeft">可以远程控制观看方设备进行方案演示</p>
         </Radio>
-        <Radio label="viewer">
-          <Icon type="social-windows"></Icon>
-          <span>我是观看方</span>
+        <Radio label="viewer" :style="{background:vertical=='viewer'?'hsla(0,0%,100%,.9)':'hsla(0,0%,100%,.03)',color:vertical=='viewer'?'#000':'hsla(0,0%,100%,.9)'}">
+          <span class="card-title">我是观看方</span>
+          <p class="aLeft">允许设备被演示方控制来观看方案演示</p>
         </Radio>
         <Button
-          style="width: 240px; margin: 22px auto 0"
+          style="margin: 22px auto 0"
+          class="button-confirm"
           type="primary"
           @click.prevent="expression"
           target="_blank"
-          >开始体验</Button
+          >开始体验 <Icon type="ios-arrow-forward" /></Button
         >
       </RadioGroup>
     </Modal>
@@ -72,40 +97,38 @@
       v-model="infoVisible"
       title=""
       footer-hide
-      :closable="false"
+      :closable="true"
       :mask-closable="false"
     >
-      <div class="codeNum">05038808</div>
+      <div class="codeNum">{{ interlinkage }}</div>
       <div class="codeWord">
         请将识别码发送给演示对象， 对方输入确认后即可开始演示
       </div>
       <Button
-        style="width: 240px; margin-top: 28px"
+        class="btn"
+        style="width: 240px;"
         type="primary"
+        :data-clipboard-text="interlinkage"
         @click.prevent="copy"
         target="_blank"
         >复制识别码</Button
       >
     </Modal>
-    <!-- 识别码框 -->
-    <!-- <div class="codeNumBox">
-
-    </div> -->
     <Modal
       v-model="viewVisible"
       title="输入识别码"
-      :closable="false"
       :mask-closable="false"
+      @on-ok="ok"
+      ok-text="确认联动"
+      @on-cancel="cancel"
     >
       <div>输入由演示方生成的识别码，确认后即可开始观看演示</div>
-      <!-- <Space direction="vertical" size="large" type="flex">
-        <Input search placeholder="Enter something..." />
-    </Space>     -->
       <Input
-        v-model="GroupID"
+        v-model="groupID"
         style="width: 200px; margin-top: 11px"
         clearable
         placeholder="输入识别码"
+        size="large"
       />
     </Modal>
   </div>
@@ -127,6 +150,8 @@ import ErrorTip from "@/components/ErrorTip";
 import DesignerInfo from "@/components/DesignerInfo";
 // 图片
 import avatar from "@/assets/images/timg.jpg";
+import Clipboard from "clipboard";
+import store from "@/store";
 export default {
   name: "VPano",
   components: {
@@ -161,23 +186,42 @@ export default {
         pageView: 0,
         Language: "", // 值为zh-CN 显示 "预约设计",否则不显示
       },
+
       dialogVisible: false,
-      vertical: "",
-      infoVisible: false,
-      viewVisible: true,
-      GroupID: "",
+      vertical: "controler", //controler 主控方 viewer 被控方
+      interlinkage: "",
+      viewing: false, //演示状态
+      infoVisible: false, //复制识别码
+      viewVisible: false,
+      groupID: "",
       ws: null,
       WebSocketsExist: "",
+      timer: null,
+      musicStatus: "",
+      socketHost:"ws://183.56.204.212:2718/ws/"
     };
   },
   created() {
     const url = window.location.href;
     this.taskId = getQueryString(url, "taskId");
-    this.initialWebSocket();
   },
   mounted() {
     this.$refs.fullLoading.visible = true;
     this.getInfo();
+  },
+  destroyed() {
+    // 销毁监听
+    this.ws.onclose();
+    this.viewing = false; //全景图链接关闭
+    window.clearInterval(this.timer);
+  },
+  watch:{
+    vertical(val) {
+     var lessObj = new Object({
+      vertical:val
+     });
+     console.log('lessObj',lessObj)
+    }
   },
   methods: {
     // 通过接口获取场景信息
@@ -209,15 +253,15 @@ export default {
             this.designer.Language = data.Language || "";
             this.designer.pageView = data.count ? data.count : 0; // 全景预览量
           } else {
-            // this.showError({
-            //   data: res.ErrorMessage || "任务异常，请联系管理员查看",
-            // });
+            this.showError({
+              data: res.ErrorMessage || "任务异常，请联系管理员查看",
+            });
           }
         })
         .catch((_) => {
-          // this.showError({
-          //   data: "任务异常，请联系管理员查看",
-          // });
+          this.showError({
+            data: "任务异常，请联系管理员查看",
+          });
         });
     },
     // 载入场景
@@ -247,7 +291,6 @@ export default {
         this.readyStatus = true;
       }, 1000);
       this.krpano.call("skin_setup_littleplanetintro1"); // 进入时使用小行星视野
-      // setInterval(this.i, 50);
     },
     showError(err) {
       this.$refs.fullLoading.visible = false;
@@ -259,11 +302,10 @@ export default {
     initHot() {
       this.$refs.hotSpot.initHot();
     },
-    //实时发送KRPano的视角信息
+    //实时发送KRPano的视角信息 操作信息
     IntervalSendMessage() {
       var krpano = this.krpano;
-      console.log("krpano", krpano);
-
+      var musicStatus = this.musicStatus;
       if (krpano && krpano.get) {
         var hlookat = krpano.get("view.hlookat");
         var vlookat = krpano.get("view.vlookat");
@@ -275,61 +317,57 @@ export default {
           vlookat: vlookat,
           fov: fov,
           scene: scene,
+          musicStatus: musicStatus,
         };
-
-        console.log("krObj", krObj);
-        console.log(this.ws, " this.ws");
+        //请求已经建立
         if (this.ws.readyState === 1) {
-          console.log(JSON.stringify(krObj))
           this.ws.send(JSON.stringify(krObj));
-        }
-      }
-    },
-    i() {
-      let krObj = {
-        hlookat: -59.95619140592913,
-        vlookat: 7.455078649912778,
-        fov: 95,
-        scene: "panoe247e19c-4588-4ce0-a4d8-120c8a5da7c9",
-      };
-      var hlookat = krObj.hlookat;
-      var vlookat = krObj.vlookat;
-      var fov = krObj.fov;
-      var scene = krObj.scene;
-      var krpano = this.krpano;
-      if (krpano && krpano.set) {
-        krpano.call("loadscene(get(" + "scene_04" + "), null, MERGE);");
-        krpano.set("view.hlookat", hlookat);
-        krpano.set("view.vlookat", vlookat);
-        krpano.set("view.fov", fov);
-        if (krpano.get("xml.scene") !== scene) {
-          //loadscene(get(startscene), null, MERGE);
-          krpano.call("loadscene(" + scene + ", null, MERGE);");
         }
       }
     },
     expression() {
       console.log("vertical", this.vertical);
-      this.infoVisible = true;
       this.dialogVisible = false;
+      this.viewing = true;
+      if (this.vertical == "controler") {
+        this.infoVisible = true;
+        //TODO 如果是控制方
+        console.log("识别码生成");
+        let code = this.codeGene(7); //TODO 封装到@/libs
+        this.interlinkage = code;
+        this.groupID =  code;
+        this.initialWebSocket(this.groupID);
+      } else if (this.vertical == "viewer") {
+        this.viewVisible = true;
+        this.groupID = "";//清空
+        //TODO 如果是观看方
+      }
+      // this.$store.commit('videoStatus',this.musicStatus);
     },
+
     copy() {
       console.log("复制识别码");
       this.infoVisible = false;
-      var _this = this
-      var clipboard = new Clipboard('.btn') //单页面引用
-      var clipboard = new this.Clipboard('.btn') //在main.js中引用
-      clipboard.on('success', (e) => {
+      var _this = this;
+      var clipboard = new Clipboard(".btn"); //单页面引用
+      var clipboard = new this.Clipboard(".btn"); //在main.js中引用
+      clipboard.on("success", (e) => {
+
+        //TODO 成功提示
+        // this.$Message.info('This is a info tip');
+
         // 释放内存
-        _this.$Message.info('复制成功');
-        clipboard.destroy()
-      })
-      clipboard.on('error', (e) => {
+        // _this.$Message[info]({
+        //   content:"复制成功"
+        // });
+        clipboard.destroy();
+      });
+      clipboard.on("error", (e) => {
         // 不支持复制
-        _this.$Message.info('该浏览器不支持自动复制');
+        // _this.$Message.info("该浏览器不支持自动复制");
         // 释放内存
-        clipboard.destroy()
-      })
+        clipboard.destroy();
+      });
     },
     krpanoReady(krpano) {
       // console.log('wss',wss)
@@ -366,17 +404,17 @@ export default {
       krpano.call("trace(krpano is ready...)");
       krpano.call("loadscene(scene_04, null, MERGE);");
     },
-    initialWebSocket() {
+    initialWebSocket(code) {
       // var ws = this.ws;
       var WebSocketsExist = this.WebSocketsExist;
       WebSocketsExist = true;
       try {
-        this.ws = new WebSocket("ws://183.56.204.212:2718/ws/12345678910");
+        this.ws = new WebSocket(`${this.socketHost}${code}`);
         console.log("this.ws", this.ws);
       } catch (ex) {
         console.log(ex);
         try {
-          this.ws = new MozWebSocket("ws://183.56.204.212:2718/ws/12345678910");
+          this.ws = new MozWebSocket(`${this.socketHost}${code}`);
           console.log("this.ws", this.ws);
         } catch (ex) {
           WebSocketsExist = false;
@@ -395,55 +433,113 @@ export default {
     },
     WSonOpen() {
       console.log("websocket opened success!");
-      setInterval(this.IntervalSendMessage, 50);
+      //启动后以50的频率数据通信给观看方
+      // this.timer = setInterval(this.IntervalSendMessage, 50);
+      this.timer = window.setInterval(this.IntervalSendMessage, 50);
     },
     WSonMessage(event) {
       console.log(event.data);
-      console.log('received: %s', event.data);
-      this.reset(event)
-                    
+      console.log("received: %s", event.data);
+      //视口同步
+      this.reset(event);
     },
     WSonClose() {
       console.log("Websocket closed.");
+      // todo 重连机制
+      // this.reconnect()
     },
     WSonError() {
       console.log("Websocket error occur.");
+      // this.reconnect()
     },
-    reset(event){
-   console.log('重置',this.vertical);
-
+    reset(event) {
+      console.log("重置", this.vertical);
       var krObj = JSON.parse(event.data);
-                    var hlookat = krObj.hlookat;
-                    var vlookat = krObj.vlookat;
-                    var fov = krObj.fov;
-                    var scene = krObj.scene;
-                    var krpano = document.getElementById("krpanoSWFObject");
-                    if (krpano && krpano.set&&this.vertical=="viewer") {
-                        krpano.call("loadscene(get(" + "scene_04" + "), null, MERGE);")
-                        krpano.set("view.hlookat", hlookat);
-                        krpano.set("view.vlookat", vlookat);
-                        krpano.set("view.fov", fov);
-                        if (krpano.get("xml.scene") !== scene) {
-                            //loadscene(get(startscene), null, MERGE);
-                            krpano.call("loadscene(" + scene + ", null, MERGE);")
-                        }
-                    }
+      var hlookat = krObj.hlookat;
+      var vlookat = krObj.vlookat;
+      var fov = krObj.fov;
+      var scene = krObj.scene;
+      var krpano = document.getElementById("krpanoSWFObject");
+      var musicStatusSet = !krObj.musicStatus; 
+      // 被控制方并且演示状态
+      if (krpano && krpano.set && this.vertical == "viewer" && this.viewing) {
+        krpano.call("loadscene(get(" + "scene_04" + "), null, MERGE);");
+        krpano.set("view.hlookat", hlookat);
+        krpano.set("view.vlookat", vlookat);
+        krpano.set("view.fov", fov);
+        if (krpano.get("xml.scene") !== scene) {
+          //loadscene(get(startscene), null, MERGE);
+          krpano.call("loadscene(" + scene + ", null, MERGE);");
+        }
+        store.commit("setVideoStatus", musicStatusSet);// 操作同步 音乐
+      }
+    },
+    finish() {
+      console.log("结束演示");
+      this.viewing = false;
+      window.clearInterval(this.timer);
+      //被控方同步结束演示
 
+      this.ws.onclose();
+    },
+    ok() {
+      console.log("赋值识别码", this.groupID);
+      if (!this.groupID) {
+        return this.showError({
+          data: "请输入识别码",
+        });
+      }
+      this.initialWebSocket(this.groupID);
+    },
+    cancel() {
+      console.log("取消");
+    },
+    codeGene(n) {
+      if (n <= 0) return -1; // 只能输入正整数
+      const limit = Math.pow(10, n);
+      let value = Math.floor(Math.random() * limit); // 用随机数向下取整，避免多一位
+      if (value < limit / 10 && value !== 0) {
+        // 取一位的时候就用不到这个函数
+        return this.codeGene(n);
+      }
+      return value;
+    },
+    musicStatusChange(param) {
+      console.log("param", param);
+      this.musicStatus = param;
+    },
+    reconnect() {
+      var that = this
+      if (that.lockReconnect) return
+      that.lockReconnect = true
+      // 没连接上会一直重连，设置延迟避免请求过多
+      setTimeout(() => {
+        console.info('尝试重连...')
+        that.initialWebSocket(this.groupID);
+        that.lockReconnect = false
+      }, 5000)
     }
+    
   },
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .n-screen {
   width: 100px;
+  text-align: center;
   height: 100px;
+  padding-top: 20px;
   position: fixed;
   right: 16px;
   top: 224px;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 24px;
   color: #fff;
+}
+.n-screen-title{
+  color: red;
+
 }
 /deep/ .codeNum {
   font-size: 36px;
@@ -490,6 +586,9 @@ export default {
 .multi-controller-panel li.controller {
   margin-right: 15px;
 }
+.multi-controller-panel li.controlled {
+  margin: 0 15px;
+}
 .multi-controller-panel .button-close {
   color: #fff;
   background: hsla(0, 0%, 100%, 0.2);
@@ -513,16 +612,75 @@ export default {
   text-decoration: underline;
   font-style: normal;
 }
-/* .codeNumBox{
-  width: 440px;
-    height: 266px;
-    background: rgba(25,29,33,.8);
-    box-shadow: 0 12px 24px 0 rgba(0,0,0,.1);
-    border-radius: 8px;
-    padding: 40px 0;
-    text-align: center;
-    color: #fff;
-    font-size: 14px;
-} */
+.content {
+  padding: 20px 0 10px;
+  font-size: 14px;
+}
+
+.tui-control {
+  display: block;
+  position: relative;
+  margin-bottom: 4px;
+  cursor: pointer;
+  color: var(--color_text__secondary);
+  text-transform: none;
+  font-size: 12px;
+}
+.select-card {
+  background: hsla(0, 0%, 100%, 0.03);
+  border-radius: 8px;
+  height: 120px;
+  padding: 22px 30px 0;
+  margin: 12px 30px;
+  color: #fff;
+  position: relative;
+}
+.select-card .card-content {
+  position: absolute;
+  top: 25px;
+  left: 50px;
+}
+.card-title {
+  font-weight: 600;
+  vertical-align: middle;
+  margin-left: 12px;
+  font-size: 24px;
+}
+
+.ivu-radio-group-vertical .ivu-radio-wrapper {
+  display: block;
+  height: 104px;
+  line-height: 30px;
+  background: hsla(0, 0%, 100%, 0.9);
+  color: rgba(3, 9, 17, 0.8);
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 22px 30px;
+  border-radius: 12px;
+  font-size: 14px!important;
+}
+.ivu-radio-group {
+  display: inline-block;
+  font-size: 14px;
+  vertical-align: middle;
+  width: 100%;
+}
+.button-confirm {
+  opacity: 0.9;
+  background: #fff;
+  border-radius: 20px;
+  color: #150f08;
+  border: none;
+  height: 40px;
+  line-height: 40px;
+  width: 127px;
+  margin: 22px auto 0;
+  display: block;
+  padding: 0;
+}
+.aLeft{
+  position: absolute;
+  left: 64px;
+}
 </style>
 
