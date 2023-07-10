@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/pano',
+    redirect: '/canvas',
     component: () => import('@/views/Tour.vue')
   },
   {
@@ -28,6 +28,11 @@ const routes = [
     path: '/socket',
     name: 'socket',
     component: () => import('@/views/socket.vue')
+  },
+  {
+    path: '/canvas',
+    name: 'canvas',
+    component: () => import('@/views/canvas.vue')
   }
 ]
 

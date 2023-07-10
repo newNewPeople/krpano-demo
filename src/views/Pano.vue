@@ -29,6 +29,13 @@
         <Icon type="ios-browsers-outline" size="20" />
         <p style="margin-top: 10px">多屏联动</p>
       </div>
+      <!-- 
+      音视频 -->
+      <div class="n-av" @click="aV = !aV">
+        <Icon type="ios-browsers-outline" size="20" />
+        <p style="margin-top: 10px">显示隐藏/视频</p>
+      </div>
+
       <div class="multi-controller-panel pc" v-if="viewing">
         <ul class="clearfix">
           <li class="copy-group-id" v-if="vertical == 'controler'">
@@ -61,6 +68,24 @@
       </div>
 
       <!-- 音视频 -->
+      <div style="position: fixed;left: 16px;top: 0px;">
+        <label>请输入 RoomToken 加入房间开始连麦</label>
+        <input id="roomtoken" type="text" />
+        <p class="tips">如果您不知道如何生成 RoomToken，查看<a href="https://developer.qiniu.io/rtc/8802/pd-overview" target="_black">这里的接入流程</a></p>
+        <button @click="joinRoom()">加入房间</button>
+        <p></p>
+        <div id="localtracks">本地视频</div>
+        <p>远端视频</p>
+        <div id="remotetracks" v-show="aV"></div>
+      </div>
+
+
+
+
+
+
+
+
     </div>
     <!-- 错误提示 -->
     <error-tip ref="error"></error-tip>
@@ -198,12 +223,14 @@ export default {
       WebSocketsExist: "",
       timer: null,
       musicStatus: "",
-      socketHost:"ws://183.56.204.212:2718/ws/"
+      socketHost:"ws://183.56.204.212:2718/ws/",
+      aV:false,
     };
   },
   created() {
     const url = window.location.href;
     this.taskId = getQueryString(url, "taskId");
+    console.log("current version", QNRTC.VERSION);
   },
   mounted() {
     this.$refs.fullLoading.visible = true;
@@ -450,7 +477,7 @@ export default {
     },
     WSonError() {
       console.log("Websocket error occur.");
-      // this.reconnect()
+      this.reconnect()
     },
     reset(event) {
       console.log("重置", this.vertical);
@@ -494,6 +521,32 @@ export default {
     cancel() {
       console.log("取消");
     },
+    addHotsport() {
+			if (this.krpano) {
+				let h = this.krpano.get('view.hlookat') // 水平视角
+	            let v = this.krpano.get('view.vlookat') // 垂直视角
+	            let hs_name = "hs" + ((Date.now() + Math.random()) | 0) // 多次点击增加热点，每个热点的名字
+				// call(action)调用并执行krpano操作代码，此处为addhotsport
+	            this.krpano.call("addhotspot(" + hs_name + ")");
+	            // set(variable, value)，将krpano变量设置为给定值，为hotsport设置url
+	            this.krpano.set("hotspot["+hs_name+"].url", "https://hospfiles.deephealth.net/patient/avatar-default.png");
+	            // 设置坐标
+	            this.krpano.set("hotspot["+hs_name+"].ath", h);
+	            this.krpano.set("hotspot["+hs_name+"].atv", v);
+	            // 设置热点是否跟随场景进行3D扭曲
+	            this.krpano.set("hotspot["+hs_name+"].distorted", true);
+	            // 热点点击事件
+	            if ( this.krpano.get("device.html5") ) {
+	                // 对于HTML5，可以将JS函数直接分配给krpano事件
+	                this.krpano.set("hotspot["+hs_name+"].onclick", function(hs) {
+	                   alert('hotspot "' + hs + '" clicked');
+	                }.bind(null, hs_name));
+		        } else {
+	                // 对于Flash，需要使用js（）操作从Flash调用js（此代码适用于Flash和HTML5）
+	                this.krpano.set("hotspot["+hs_name+"].onclick", "js( alert(calc('hotspot \"' + name + '\" clicked')) );");
+		        }
+			}
+		},
     codeGene(n) {
       if (n <= 0) return -1; // 只能输入正整数
       const limit = Math.pow(10, n);
@@ -518,7 +571,69 @@ export default {
         that.initialWebSocket(this.groupID);
         that.lockReconnect = false
       }, 5000)
+    },
+    // 这里采用的是 async/await 的异步方案，您也可以根据需要或者习惯替换成 Promise 的写法
+async joinRoom() {
+  // 创建QNRTCClient对象
+  const client = QNRTC.createClient();
+  // 需要先监听对应事件再加入房间
+  this.autoSubscribe(client);
+  const roomTokenInput = document.getElementById("roomtoken");
+  const roomToken = roomTokenInput.value;
+  // 这里替换成刚刚生成的 RoomToken
+  await client.join(roomToken);
+  console.log("joinRoom success!");
+  await this.publish(client);
+},
+// 增加一个函数 publish，用于采集并发布自己的媒体流
+// 这里的参数 client 是指刚刚初始化的 QNRTCClient 对象
+async publish(client) {
+    // 同时采集麦克风音频和摄像头视频轨道。
+    // 这个函数会返回一组audio track 与 video track
+
+    const localTracks = await QNRTC.createMicrophoneAndCameraTracks();
+    console.log("my local tracks", localTracks);
+    // 将刚刚的 Track 列表发布到房间中
+    await client.publish(localTracks);
+    console.log("publish success!");
+    // 在这里添加
+    // 获取页面上的一个元素作为播放画面的父元素
+    const localElement = document.getElementById("localtracks");
+    // 遍历本地采集的 Track 对象
+    for (const localTrack of localTracks) {
+        console.log(localTrack)
+        // 如果这是麦克风采集的音频 Track，我们就不播放它。
+        if (localTrack.isAudio()) continue;
+        // 调用 Track 对象的 play 方法在这个元素下播放视频轨
+        localTrack.play(localElement, {
+            mirror: true
+        });
     }
+},
+// 这里的参数 client 是指刚刚初始化的 QNRTCClient 对象
+async subscribe(client, tracks) {
+  // 传入 Track 对象数组调用订阅方法发起订阅，异步返回成功订阅的 Track 对象。
+  const remoteTracks = await client.subscribe(tracks);
+
+  // 选择页面上的一个元素作为父元素，播放远端的音视频轨
+  const remoteElement = document.getElementById("remotetracks");
+  // 遍历返回的远端 Track，调用 play 方法完成在页面上的播放
+  for (const remoteTrack of [...remoteTracks.videoTracks, ...remoteTracks.audioTracks]) {
+      remoteTrack.play(remoteElement);
+  }
+},
+
+// 这里的参数 client 是指刚刚初始化的 QNRTCClient 对象, 同上
+autoSubscribe(client) {
+    // 添加事件监听，当房间中出现新的 Track 时就会触发，参数是 trackInfo 列表
+    client.on("user-published", (userId,tracks) => {
+        console.log("user-published!", userId,tracks);
+        this.subscribe(client, tracks)
+        .then(() => console.log("subscribe success!"))
+        .catch(e => console.error("subscribe error", e));
+    });
+    // 就是这样，就像监听 DOM 事件一样通过 on 方法监听相应的事件并给出处理函数即可
+}
     
   },
 };
@@ -536,6 +651,20 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 24px;
   color: #fff;
+  cursor: pointer;
+}
+.n-av{
+  width: 100px;
+  text-align: center;
+  height: 100px;
+  padding-top: 20px;
+  position: fixed;
+  right: 16px;
+  top: 350px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 24px;
+  color: #fff;
+  cursor: pointer;
 }
 .n-screen-title{
   color: red;
@@ -682,5 +811,28 @@ export default {
   position: absolute;
   left: 64px;
 }
+
+select {
+            width: 300px;
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+         #remotetracks {
+          width: 320px;
+          height: 240px;
+          
+          background-color: rgba(0, 0, 0, 0.5);
+        }
+        #localtracks {
+          width: 100px;
+          height:100px;
+          position: fixed;
+  right: 100px;
+  bottom: 50px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+        }
 </style>
 

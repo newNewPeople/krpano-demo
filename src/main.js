@@ -3,6 +3,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import { Modal, Button, Alert, Progress, Icon, Input ,RadioGroup,Radio,Message } from 'view-design';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
 Vue.component('Modal', Modal);
 Vue.component('Button', Button);
 Vue.component('Alert', Alert);
