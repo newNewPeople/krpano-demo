@@ -78,8 +78,16 @@
         <p>远端视频</p>
         <div id="remotetracks" v-show="aV"></div>
       </div>
-
-
+      <!--  -->
+      <div  style="position: fixed;left: 16px;top: 100px;">
+      <h2 class="left-align">声网 Voice Web SDK Quickstart</h2>
+        <div class="row">
+            <div>
+                <button type="button" @click="join">JOIN</button>
+                <button type="button" @click="leave">LEAVE</button>
+            </div>
+        </div>
+      </div>
 
 
 
@@ -177,6 +185,12 @@ import DesignerInfo from "@/components/DesignerInfo";
 import avatar from "@/assets/images/timg.jpg";
 import Clipboard from "clipboard";
 import store from "@/store";
+
+//
+// import imMessage from '../BKSIM/message';
+// const imConfig = require("../../../BKSIM/configuration");
+// import imEventEmitter from "../BKSIM/IMEventEmitter";
+import AgoraRTC from "agora-rtc-sdk-ng"
 export default {
   name: "VPano",
   components: {
@@ -225,6 +239,23 @@ export default {
       musicStatus: "",
       socketHost:"ws://183.56.204.212:2718/ws/",
       aV:false,
+      //
+      role: "", // caller : 呼叫方；calledor:被呼叫的人
+      userInfo: null,
+      rtc:{
+    localAudioTrack: null,
+    client: null
+},
+options:{
+    // Pass your App ID here.
+    appId: "399108c2adac40f4a8b532d1232bc032",
+    // Set the channel name.
+    channel: "0712",
+    // Pass your temp token here.
+    token: "007eJxTYJBj4VYNlXulW8On0hlTpCv8q3mf+/agG/XxnnXM6fopYQoMxpaWhgYWyUaJKYnJJgZpJokWSabGRimGRsZGSckGxkYbitelNAQyMnx7sIKBEQpBfBYGA3NDIwYGAPNHG1s=",
+    // Set the user ID.
+    uid: 123456
+}
     };
   },
   created() {
@@ -235,6 +266,8 @@ export default {
   mounted() {
     this.$refs.fullLoading.visible = true;
     this.getInfo();
+    //
+    this.startBasicCall();
   },
   destroyed() {
     // 销毁监听
@@ -633,7 +666,62 @@ autoSubscribe(client) {
         .catch(e => console.error("subscribe error", e));
     });
     // 就是这样，就像监听 DOM 事件一样通过 on 方法监听相应的事件并给出处理函数即可
+},
+async startBasicCall() {
+    // Create an AgoraRTCClient object.
+    this.rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+
+    // Listen for the "user-published" event, from which you can get an AgoraRTCRemoteUser object.
+    this.rtc.client.on("user-published", async (user, mediaType) => {
+        // Subscribe to the remote user when the SDK triggers the "user-published" event
+        await this.rtc.client.subscribe(user, mediaType);
+        console.log("subscribe success");
+
+        // If the remote user publishes an audio track.
+        if (mediaType === "audio") {
+            // Get the RemoteAudioTrack object in the AgoraRTCRemoteUser object.
+            const remoteAudioTrack = user.audioTrack;
+            // Play the remote audio track.
+            remoteAudioTrack.play();
+        }
+
+        // Listen for the "user-unpublished" event
+        this.rtc.client.on("user-unpublished", async (user) => {
+            // Unsubscribe from the tracks of the remote user.
+            await this.rtc.client.unsubscribe(user);
+        });
+
+    });
+
+    // window.onload = function () {
+
+    //     document.getElementById("join").onclick = async function () {
+    //         // Join an RTC channel.
+           
+    //     }
+
+    //     document.getElementById("leave").onclick = async function () {
+         
+    //     }
+    // }
+},
+async join(){
+  await this.rtc.client.join(this.options.appId, this.options.channel, this.options.token, this.options.uid);
+            // Create a local audio track from the audio sampled by a microphone.
+    this.rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+            // Publish the local audio tracks to the RTC channel.
+    await this.rtc.client.publish([rtc.localAudioTrack]);
+
+    console.log("publish success!");
+},
+async leave(){
+   // Destroy the local audio track.
+   this.rtc.localAudioTrack.close();
+
+// Leave the channel.
+await this.rtc.client.leave();
 }
+
     
   },
 };

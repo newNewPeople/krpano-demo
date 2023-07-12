@@ -17,7 +17,8 @@
     "vue-router": "^3.2.0",
     "vuex": "^4.1.0",
     "clipboard": "^2.0.6",
-    "element-ui": "^2.15.6"
+    "element-ui": "^2.15.6",
+    "agora-rtc-sdk-ng":"latest"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.13",
