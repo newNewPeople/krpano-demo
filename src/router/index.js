@@ -30,9 +30,9 @@ const routes = [
     component: () => import('@/views/socket.vue')
   },
   {
-    path: '/canvas',
-    name: 'canvas',
-    component: () => import('@/views/canvas.vue')
+    path: '/jszip',
+    name: 'jszip',
+    component: () => import('@/views/jszip.vue')
   }
 ]
 

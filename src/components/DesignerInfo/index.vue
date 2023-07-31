@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="designer hidePhone">
+    <div class="designer">
       <img class="portrait" draggable="false" :src="designer.portrait" />
       <div class="designer-right">
         <div class="right-top">
@@ -24,8 +24,11 @@
             <span class="split">|</span> <span>浏览量: </span>
             {{ designer.pageView }}
           </p>
+         
         </div>
       </div>
+      <div style="color:white;">打电话 <a :href="tel">点击</a>
+</div>
     </div>
 
     <div class="designer hidePc" @click="visible = true" v-if="!isShowOp">
@@ -77,6 +80,9 @@ export default {
     return {
       visible: false,
       isShowOp: false, // 手机端打开，且链接带着from=oppein时，不显示左下角设计师信息框
+      store_info:{
+phone:18310128442
+   }
     };
   },
   props: {
@@ -89,7 +95,12 @@ export default {
     if(getQueryString(window.location.href, "from") == "oppein") {
       this.isShowOp = true
     }
-  }
+  },
+  computed:{
+tel(){
+  return 'tel:'+Number(this.store_info.phone)
+    }
+}
 };
 </script>
 

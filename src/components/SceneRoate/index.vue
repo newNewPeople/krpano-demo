@@ -22,9 +22,15 @@
 import SingleBtn from "@/components/SingleButton";
 // 工具
 import { isMobile } from "@/libs/utils";
+import store from '@/store'
 export default {
   components: {
     SingleBtn,
+  },
+  props: {
+    rom: {
+      type: String,
+    },
   },
   data() {
     return {
@@ -40,6 +46,27 @@ export default {
     this.rotateStatus = this.krpano.get("autorotate.enabled") || false;
     if (this.gyroStatus) {
       this.rotateStatus = false;
+    }
+  },
+  watch: {
+    rom(val) {
+      console.log('val>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',val);      
+    },
+    rotateStatus(val){
+      console.log('val>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',val);  
+      store.commit("setRotateStatus", val);
+
+    },
+    rotateStatusSet(val){
+     this.rotateStatus = val
+    }
+  },
+  computed:{
+    // ...mapGetters(['videoStatus']),
+    rotateStatusSet() {
+      console.log('rotateStatus');
+      return store.state.user.rotateStatusSet;
+     
     }
   },
   // destroyed() {
