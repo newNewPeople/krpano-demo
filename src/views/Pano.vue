@@ -326,7 +326,7 @@
       </div>
 
       <!-- 音视频 -->
-      <div style="position: fixed; left: 16px; top: 0px">
+      <div style="position: fixed; left: 16px; top: 600px">
         <label>请输入 RoomToken 加入房间开始连麦</label>
         <input id="roomtoken" type="text" />
         <!-- <p class="tips">
@@ -340,7 +340,7 @@
         <p></p>
         <!-- <div id="localtracks">本地视频</div> -->
         <div id="localtracks" @click="questions = !questions">问题选择</div>
-        <p>远端视频</p>
+        <!-- <p>远端视频</p> -->
         <div id="remotetracks" v-show="aV"></div>
       </div>
       <!--  -->
@@ -588,7 +588,7 @@ export default {
       src: "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
       questions: false,
       url: null,
-      showViewer: true,
+      showViewer: false,
     };
   },
   created() {
