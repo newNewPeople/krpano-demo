@@ -53,6 +53,24 @@ export default {
     const url = window.location.href;
     this.tourId = getQueryString(url, "tourId");
     this.sceneId = getQueryString(url, "sceneId");
+
+
+    // var reg = RegExp(/test/);
+    //   var regs = RegExp(/beta/);
+    //   let currUri = window.location.href;
+    //   if (reg.test(currUri)) {
+    //     window.open(
+    //       `http://work.dev.zomyun.com/permission/leftMenu/share?id=1`
+    //     );
+    //   } else if (regs.test(currUri)) {
+    //     window.open(
+    //       `http://work.beta.zomyun.com/permission/leftMenu/share?id=1`
+    //     );
+    //   } else {
+    //     window.open(
+    //       `https://work.zomyun.com/permission/leftMenu/share?id=1`
+    //     );
+    //   }
   },
   mounted() {
     this.getInfo();

@@ -514,7 +514,7 @@ export default {
       scene: {},
       krpano: null,
       readyStatus: false,
-      xmlstr: "",
+      xmlstr: '',
       designer: {
         portrait: avatar,
         id: "",
