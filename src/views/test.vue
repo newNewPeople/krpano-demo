@@ -32,6 +32,7 @@
 <script>
 // 接口
 import { GetTour, GetScene } from "@/api/api";
+import { GetPano } from "@/api/api";
 // 工具
 import { getQueryString, getTime } from "@/libs/utils";
 // 组件
@@ -47,12 +48,14 @@ export default {
       visible: false,
       v: 0,
       h: 0,
+      taskId: "",
     };
   },
   created() {
     const url = window.location.href;
     this.tourId = getQueryString(url, "tourId");
     this.sceneId = getQueryString(url, "sceneId");
+    this.taskId = getQueryString(url, "taskId");
 
 
     // var reg = RegExp(/test/);
@@ -80,6 +83,7 @@ export default {
     getInfo() {
       const Api = this.tourId ? GetTour : GetScene;
       Api({ tourId: this.tourId })
+      // GetPano({ taskId: this.taskId })
         .then((res) => {
           if (res.IsSuccess && res.SuccessReturn) {
             this.scene = res.SuccessReturn;
@@ -113,9 +117,49 @@ export default {
           }
         })
         .catch((err) => {
-          this.showError(err.response.data);
+          // this.showError(err.response.data);
+          console.log('err',err);
         });
     },
+    // getInfo() {
+    //   GetPano({ taskId: this.taskId })
+    //     .then((res) => {
+    //       console.log("res", res);
+    //       if (res.IsSuccess && res.SuccessReturn) {
+    //         this.scene = res.SuccessReturn;
+    //         this.scene.formatterXml = formatXml(this.scene.TourXml);
+    //         this.xmlstr = formatXml(res.SuccessReturn.TourXml);
+    //         // 载入场景
+    //         this.initKrpano(this.scene.formatterXml);
+    //         // 获取用户信息
+    //         const data = res.SuccessReturn;
+    //         if (data.DesignnerHeadImg) {
+    //           this.designer.portrait = data.DesignnerHeadImg;
+    //         }
+    //         // 若品牌只有欧铂丽，全景图预约量尺跳转页面需要更改
+    //         if (data.Brand === "OPL") {
+    //           this.designer.orderUrl = "http://www.oppolia.com";
+    //           this.designer.orderUrlM = "http://www.oppolia.com";
+    //         }
+    //         this.designer.id = data.Cid;
+    //         this.designer.name = data.DesignerName || "设计师";
+    //         this.designer.phone = data.DesignerTel || "";
+    //         this.designer.shopName = data.ShopName || "";
+    //         this.designer.tenant_id = data.tenant_id || "";
+    //         this.designer.Language = data.Language || "";
+    //         this.designer.pageView = data.count ? data.count : 0; // 全景预览量
+    //       } else {
+    //         this.showError({
+    //           data: res.ErrorMessage || "任务异常，请联系管理员查看",
+    //         });
+    //       }
+    //     })
+    //     .catch((_) => {
+    //       this.showError({
+    //         data: "任务异常，请联系管理员查看",
+    //       });
+    //     });
+    // },
     // 载入场景
     initKrpano(xml) {
       const config = {
@@ -129,8 +173,57 @@ export default {
       };
       embedpano(config);
     },
+    // ready() {
+    //   this.krpano = document.getElementById("krpanoSWFObject");
+    // },
+     // 载入场景
+    //  initKrpano(xml) {
+    //   let _this = this;
+    //   const config = {
+    //     target: "pano",
+    //     xml: null,
+    //     html5: "auto",
+    //     passQueryParameters: true,
+    //     onready: function (krpano) {
+    //       krpano.call("loadxml(" + _this.xmlstr + ")");
+    //       _this.ready();
+    //       _this.krpanoReady(krpano);
+    //     },
+    //   };
+    //   embedpano(config);
+    // },
     ready() {
       this.krpano = document.getElementById("krpanoSWFObject");
+      this.$root.krpano = document.getElementById("krpanoSWFObject");
+      setInterval(() => {
+        if (this.$refs.fullLoading) {
+          this.$refs.fullLoading.visible = false;
+          this.$refs.fullLoading.percent = 100;
+        }
+        this.readyStatus = true;
+      }, 1000);
+      this.krpano.call("skin_setup_littleplanetintro1"); // 进入时使用小行星视野
+       console.log(1111);
+       let h = 89.69927172016416;
+let v = -178.533106155649;
+
+// 假设已知转换后的屏幕坐标 x 和 y 值
+let ath = ''/* 替换为实际的 x 值 */;
+let atv = ''/* 替换为实际的 y 值 */;
+
+// 调用 spheretoscreen 函数并传递参数
+let result = this.krpano.spheretoscreen(h, v, ath, atv);
+
+// 检查结果并处理
+if (result) {
+    // 成功转换坐标
+    console.log("屏幕坐标：", ath, atv, result);
+    console.log("result：", result);
+} else {
+    // 转换失败
+    console.error("无法转换坐标");
+}
+
     },
 
     handleConfirmText() {

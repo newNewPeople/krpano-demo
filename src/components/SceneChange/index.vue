@@ -95,6 +95,7 @@ export default {
       this.listVisible = !this.listVisible;
     },
     changeScene(sceneName) {
+      console.log('sceneName',sceneName,this.currentSceneName);
       if (sceneName === this.currentSceneName) {
         return;
       } else {

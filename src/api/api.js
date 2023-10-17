@@ -93,3 +93,13 @@ export const getBrandLogoCodeList = (param) => {
         params: param
     })
 }
+// 获取商品清单(预览页面)
+export const getTourProductListC = (params) => {
+    console.log('获取商品清单C');
+    // return api.get('render/Tour/getTourProductList?taskId=' + params.taskId + '&tourId=' + params.tourId);
+    return axios({
+        url: '/render/Tour/getTourProductList',
+        method: 'get',
+        params: params
+    })
+}

@@ -67,7 +67,7 @@
                       class="swipe-list-item-thumb"
                       style="
                         background-image: url('https://qhrenderpicoss.kujiale.com/r/2023/06/07/L3D221S41ENDPFQML4YUWIPCYLUF3P3W6888.0_7500x1250.jpg_f?x-oss-process=image/format,webp/quality,q_80|image/resize,w_200');
-                      "
+                    "
                     ></div>
                     <div class="swipe-list-item-title">
                       <div
@@ -452,8 +452,7 @@
       :mask-closable="false"
       @on-ok="ok"
       ok-text="确认联动"
-      @on-cancel="cancel"
-    >
+      @on-cancel="cancel">
       <div>输入由演示方生成的识别码，确认后即可开始观看演示</div>
       <Input
         v-model="groupID"

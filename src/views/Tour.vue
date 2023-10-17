@@ -21,6 +21,8 @@
       <hot-spot ref="hotSpot" @initHot="initHot"></hot-spot>
       <!-- 设计师信息 -->
       <designer-info :designer="designer"></designer-info>
+       <!-- 商品 -->
+       <scene-commodity v-show="isShowCommodity" ref="commodityRef" @close2D="close2D"></scene-commodity>
     </div>
     <!-- 错误提示 -->
     <error-tip ref="error"></error-tip>
@@ -29,6 +31,7 @@
 <script>
 // 接口
 import { GetTour, GetScene } from "@/api/api";
+import { GetPano } from "@/api/api";
 // 工具
 import { getQueryString, getTime } from "@/libs/utils";
 // 组件
@@ -42,6 +45,7 @@ import SceneLogo from "@/components/SceneLogo";
 import HotSpot from "@/components/HotSpot";
 import ErrorTip from "@/components/ErrorTip";
 import DesignerInfo from "@/components/DesignerInfo";
+import SceneCommodity from "@/components/SceneCommodity"
 // 图片
 import avatar from "@/assets/images/timg.jpg";
 export default {
@@ -57,6 +61,7 @@ export default {
     SceneLogo,
     HotSpot,
     DesignerInfo,
+    SceneCommodity,
   },
   data() {
     return {
@@ -78,13 +83,16 @@ export default {
         tenant_id: "", // 值为2 显示 "预约设计",否则不显示
         pageView: 0,
         Language: "", // 值为zh-CN 显示 "预约设计",否则不显示
+        taskId: "",
       },
+      isShowCommodity:true
     };
   },
   created() {
     const url = window.location.href;
     this.tourId = getQueryString(url, "tourId");
     this.sceneId = getQueryString(url, "sceneId");
+    this.taskId = getQueryString(url, "taskId");
   },
   mounted() {
     this.$refs.fullLoading.visible = true;
@@ -139,6 +147,45 @@ export default {
           });
         });
     },
+    // getInfo() {
+    //   GetPano({ taskId: this.taskId })
+    //     .then((res) => {
+    //       console.log("res", res);
+    //       if (res.IsSuccess && res.SuccessReturn) {
+    //         this.scene = res.SuccessReturn;
+    //         this.scene.formatterXml = formatXml(this.scene.TourXml);
+    //         this.xmlstr = formatXml(res.SuccessReturn.TourXml);
+    //         // 载入场景
+    //         this.initKrpano(this.scene.formatterXml);
+    //         // 获取用户信息
+    //         const data = res.SuccessReturn;
+    //         if (data.DesignnerHeadImg) {
+    //           this.designer.portrait = data.DesignnerHeadImg;
+    //         }
+    //         // 若品牌只有欧铂丽，全景图预约量尺跳转页面需要更改
+    //         if (data.Brand === "OPL") {
+    //           this.designer.orderUrl = "http://www.oppolia.com";
+    //           this.designer.orderUrlM = "http://www.oppolia.com";
+    //         }
+    //         this.designer.id = data.Cid;
+    //         this.designer.name = data.DesignerName || "设计师";
+    //         this.designer.phone = data.DesignerTel || "";
+    //         this.designer.shopName = data.ShopName || "";
+    //         this.designer.tenant_id = data.tenant_id || "";
+    //         this.designer.Language = data.Language || "";
+    //         this.designer.pageView = data.count ? data.count : 0; // 全景预览量
+    //       } else {
+    //         this.showError({
+    //           data: res.ErrorMessage || "任务异常，请联系管理员查看",
+    //         });
+    //       }
+    //     })
+    //     .catch((_) => {
+    //       this.showError({
+    //         data: "任务异常，请联系管理员查看",
+    //       });
+    //     });
+    // },
     // 载入场景
     initKrpano(xml) {
       const config = {
@@ -152,6 +199,25 @@ export default {
       };
       embedpano(config);
       
+    },
+         // 载入场景
+    //      initKrpano(xml) {
+    //   let _this = this;
+    //   const config = {
+    //     target: "pano",
+    //     xml: null,
+    //     html5: "auto",
+    //     passQueryParameters: true,
+    //     onready: function (krpano) {
+    //       krpano.call("loadxml(" + _this.xmlstr + ")");
+    //       _this.ready();
+    //       _this.krpanoReady(krpano);
+    //     },
+    //   };
+    //   embedpano(config);
+    // },
+    close2D() {
+      this.$refs.voice && this.$refs.voice.close2D(true)
     },
     ready() {
       this.krpano = document.getElementById("krpanoSWFObject");
